@@ -170,7 +170,7 @@ bool VoltageIndicator::voltageStatus()
 	CurrentIndicator C_Indicator;
 	if (V_Soc.lowStatus("Voltage"))
 	    {		
-			return C_Indicator.currentStatus();
+		return true;
 		}
 
 	
@@ -182,7 +182,7 @@ bool TempratureIndicator::tempratureStatus()
 	VoltageIndicator V_Indicator;
 	if(T_Soc.lowStatus("Temperature"))
 	    {
-			return V_Indicator.voltageStatus();
+		return true;
 	    }
 	
 	
@@ -208,7 +208,6 @@ bool weatherIndicator::weatherStatus()
 		cout << "Very Low Temperature!! charge is not allowed !" << endl;
 		return true;
 	}
-	return Tempratureindicator.tempratureStatus();
 
 }
 

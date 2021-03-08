@@ -25,7 +25,14 @@ int main() {
 
 	/*---------------------------------------battery Charging rate conditions check---------------------------*/
 	BatteryIndicator Batteryindicator(checkBatteryTemperature, checkBatteryVoltage, checkBatteryCurrent);
-	StateOfChargeRate battery_charging_check;
+	StateOfChargeRate   battery_charging_check;
+	TempratureIndicator T_Indicator;
+	VoltageIndicator    V_Indicator;
+	CurrentIndicator    C_Indicator;
+	assert(T_Indicator.tempratureStatus() == true);
+	assert(V_Indicator.voltageStatus()    == true);
+	assert(C_Indicator.currentStatus()    == true);
+
 	assert(battery_charging_check.batteryRequirements_For_Charging() == true);
 
 	//system("pause");
