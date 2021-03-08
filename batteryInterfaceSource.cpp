@@ -128,42 +128,30 @@ bool StateOfChargeRate::batteryRequirements_For_Charging()
 		return true;
 	}
 }
-bool lowWarning()
-{
-	if (StatusOfCharge::lowBatteryStatusEarlyWarning >= StatusOfCharge::currentBatteryStatus && StatusOfCharge::currentBatteryStatus >= StatusOfCharge::lowBatteryStatus)
-	{
-		cout << "warning : Battery is low !" << endl;
-		return true;
-	}
-	return false;
-}
-bool highWarning()
-{	
-
-	if (StatusOfCharge::fullBatteryStatusEarlyWarning <= StatusOfCharge::currentBatteryStatus && StatusOfCharge::fullBatteryStatus != StatusOfCharge::currentBatteryStatus)
-	{
-		cout << "warning : Battery is about to charge !" << endl;
-		return true;
-	}
-	return false;
-}
-
 
 bool StatusOfCharge::BatteryChargingStatus(float BatteryStatus)
 {
-	bool returnCode;
 	StatusOfCharge::currentBatteryStatus = BatteryStatus;
-	returnCode = lowWarning();
-	if (!returnCode && currentBatteryStatus <= lowBatteryStatus )
+	map<string, int> status{ {"LOW_SOC_4BREACH",StateOfChargeRate::lowBatteryStatus },
+						   {"LOW_SOC_3WARNING",StateOfChargeRate::lowBatteryStatusEarlyWarning },
+						   {"HIGH_SOC_2WARNING", StateOfChargeRate::fullBatteryStatusEarlyWarning },
+						   {"HIGH_SOC_1BREACH",StateOfChargeRate::fullBatteryStatus } 
+							};
+
+	for (const auto & checkStatus : status)
 	{
-		cout << "Battery is critical !";
-		return true;
+		if ((currentBatteryStatus >= checkStatus.second ))
+		{
+			cout << checkStatus.first.data() << endl;
+			break;
+		}
+		else if ((currentBatteryStatus <= status["LOW_SOC_3WARNING"]) && (currentBatteryStatus > status["LOW_SOC_4BREACH"]) )
+		{
+			cout << "low SOC !"<< endl;
+			break;
+		}
+
 	}
-	returnCode = highWarning();
-	if (!returnCode && currentBatteryStatus == fullBatteryStatus)
-	{
-		cout << "warning : Battery is full charged ! Please disconnect !" << endl;
-		return true;
-	}
+	return true;
 	
 }
