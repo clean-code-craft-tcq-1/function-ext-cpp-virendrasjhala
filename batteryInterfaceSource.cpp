@@ -128,20 +128,41 @@ bool StateOfChargeRate::batteryRequirements_For_Charging()
 		return true;
 	}
 }
+bool lowWarning()
+{
+	if (StatusOfCharge::lowBatteryStatusEarlyWarning >= StatusOfCharge::currentBatteryStatus && StatusOfCharge::currentBatteryStatus >= StatusOfCharge::lowBatteryStatus)
+	{
+		cout << "warning : Battery is low !" << endl;
+		return true;
+	}
+	return false;
+}
+bool highWarning()
+{	
+
+	if (StatusOfCharge::fullBatteryStatusEarlyWarning <= StatusOfCharge::currentBatteryStatus && StatusOfCharge::fullBatteryStatus != StatusOfCharge::currentBatteryStatus)
+	{
+		cout << "warning : Battery is about to charge !" << endl;
+		return true;
+	}
+	return false;
+}
+
 
 bool StatusOfCharge::BatteryChargingStatus(float BatteryStatus)
 {
-	int returnCode = 0;
+	bool returnCode;
 	StatusOfCharge::currentBatteryStatus = BatteryStatus;
-
-	if (currentBatteryStatus <= lowBatteryStatus)
+	returnCode = lowWarning();
+	if (!returnCode && currentBatteryStatus <= lowBatteryStatus )
 	{
-		cout << "Battery is critical !" << endl;
+		cout << "Battery is critical !";
 		return true;
 	}
-	else if (currentBatteryStatus <= lowBatteryStatusEarlyWarning)
+	returnCode = highWarning();
+	if (!returnCode && currentBatteryStatus == fullBatteryStatus)
 	{
-		cout << "warning : Battery is low !" << endl;
+		cout << "warning : Battery is full charged ! Please disconnect !" << endl;
 		return true;
 	}
 	

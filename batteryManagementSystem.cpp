@@ -9,7 +9,7 @@ int main() {
 
 	/*-------------------------------------------input parameters----------------------------------------*/
 	float setTodaysTemperature    = 23;
-	int   checkStatusofcharge     = 60;
+	int   checkStatusofcharge     = 80;
 	float checkBatteryTemperature = 21;
 	float checkBatteryVoltage     = 4;
 	float checkBatteryCurrent     = 1.0;
