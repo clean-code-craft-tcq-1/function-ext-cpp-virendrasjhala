@@ -74,9 +74,7 @@ class StatusOfCharge :public StateOfChargeRate, public VoltageIndicator
 public:
 	static int currentBatteryStatus;
 	StatusOfCharge() {}
-	bool lowStatus(string checkFor);
-	bool highStatus(string checkFor);
-	bool BatteryChargingStatus(float remainBatteryStatus);
+	bool BatteryChargingStatus(float BatteryStatus);
 	
 };
 class weatherIndicator 

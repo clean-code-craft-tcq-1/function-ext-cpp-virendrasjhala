@@ -51,147 +51,45 @@ void BatterySpecification::BatterySpecificationPrinter()
 		 << "   "  << CurrentIndicator::currentMaxThreshould <<"E"<<"      "<< BatteryElements::current              <<"E"  << setw(9) 
 		 << VoltageIndicator::voltageMinThreshould  <<"V"    << setw(7)     << VoltageIndicator::vOltageMaxThreshould <<"V" <<"      "  << BatteryElements::voltage               <<"V"<<endl;
 }
-
-bool StatusOfCharge::lowStatus(string checkFor)
-{
-	
-	if (checkFor == "B_status")
-	{
-
-		if (currentBatteryStatus <= lowBatteryStatus)
-		{
-			cout << "Battery is critical! Please Recharge battery !" << endl;
-			return true;
-		}
-		if (currentBatteryStatus <= lowBatteryStatusEarlyWarning)
-		{
-			cout << "Warning : Battery is low! Please Recharge battery !" << endl;
-			return true;
-		}
-		else
-		{
-			cout << "Battery charge is normal !" << endl;
-			return true;
-		}
-		
-	}
-
-	if (checkFor == "Voltage")
-	{
-		if (BatteryElements::voltage <= VoltageIndicator::voltageMinThreshould)
-		{
-			cout << "Low voltage Breach! Please check the Voltage level !" << endl;
-			return true;
-		}
-		if (BatteryElements::voltage <= VoltageIndicator::voltageMinWarning)
-		{
-			cout << "warning : Low voltage! Please check the Voltage level !" << endl;
-			return true;
-		}
-		else
-		{
-			cout << "voltage is normal !" << endl;
-			return true;
-		}
-	}
-
-	if (checkFor == "Current")
-	{
-		if (BatteryElements::current <= CurrentIndicator::currentMinThreshould)
-		{
-			cout << "Low current Breach! Please check the current level !" << endl;
-			return true;
-		}
-		if (BatteryElements::current <= CurrentIndicator::currentMinWarning)
-		{
-			cout << "warning : Low current! Please check the current level !" << endl;
-			return true;
-		}
-		else
-		{
-			cout << "Battery current is normal !" << endl;
-			return true;
-		}
-	}
-
-	if (checkFor == "Temperature")
-	{
-		if (BatteryElements::temprature <= TempratureIndicator::temperatureMinThreshould)
-		{
-			cout << "Low voltage Breach! Please check the Voltage level !" << endl;
-			return true;
-		}
-		if (BatteryElements::temprature <= TempratureIndicator::temperatureMinThreshouldWarning)
-		{
-			cout << "Low voltage Warning! Please check the Voltage level !"<<endl;
-			return true;
-		}
-		else
-		{
-			cout << "Battery Temperature is normal !"<<endl;
-			return true;
-		}
-	}
-
-}
-
-bool StatusOfCharge::highStatus(string checkFor)
-{
-	if (checkFor == "B_status")
-	{
-		if (currentBatteryStatus == fullBatteryStatus)
-		{
-			cout << "Battery is completely charged!! please disconnect charger !" << endl;
-			return true;
-		}
-		if(currentBatteryStatus >= fullBatteryStatusEarlyWarning)
-		{
-			cout << "warning : Battery is about to charge!! please disconnect charger !" << endl;
-			return true;
-		}
-		
-	}
-	return false;
-}
-
 bool CurrentIndicator::currentStatus()
 {
-	StatusOfCharge C_Soc;
-	if(C_Soc.lowStatus("Current"))
-	    {
-			return true;
-		}
-
+	if (currentMinThreshould >= BatteryElements::current || currentMaxThreshould <= BatteryElements::current)
+	{
+		cout << "Charge current Rate out of range!\n";
+		return true;
+	}
+	else
+	{
+		return true;
+	}
 }
 
 bool VoltageIndicator::voltageStatus()
 {
-	StatusOfCharge V_Soc;
-	CurrentIndicator C_Indicator;
-	if (V_Soc.lowStatus("Voltage"))
-	    {		
+	CurrentIndicator Currentindicator;
+	if (voltageMinThreshould >= BatteryElements::voltage || vOltageMaxThreshould <= BatteryElements::voltage)
+	{
+		cout << "Charge voltage Rate out of range!\n";
 		return true;
-		}
-
-	
+	}
+	return true;
 }
 
 bool TempratureIndicator::tempratureStatus()
 {
-	StatusOfCharge T_Soc;
-	VoltageIndicator V_Indicator;
-	if(T_Soc.lowStatus("Temperature"))
-	    {
+	VoltageIndicator Voltageindicator;
+	if (temperatureMinThreshould >= BatteryElements::temprature || temperatureMaxThreshould <= BatteryElements::temprature)
+	{
+		cout << "Charge tamperature of battery out of range!\n";
 		return true;
-	    }
-	
-	
+	}
+	return true;
 }
 
 BatteryIndicator::BatteryIndicator(float temp, float vol, float curr)
 {
-	current    = curr;
-	voltage    = vol;
+	current = curr;
+	voltage = vol;
 	temprature = temp;
 }
 
@@ -208,7 +106,7 @@ bool weatherIndicator::weatherStatus()
 		cout << "Very Low Temperature!! charge is not allowed !" << endl;
 		return true;
 	}
-
+	
 }
 
 void weatherIndicator::TodaysTemperature(float temp)
@@ -218,29 +116,51 @@ void weatherIndicator::TodaysTemperature(float temp)
 
 bool StateOfChargeRate::batteryRequirements_For_Charging()
 {
-	weatherIndicator weatherHandler;
+	weatherIndicator wheaterHandler;
 	BatterySpecification Batteryspec;
-	if (weatherHandler.weatherStatus())
-		{
-		    Batteryspec.BatterySpecificationPrinter();
-			return true;
-		}
-	
+	if (wheaterHandler.weatherStatus())
+	{
+		Batteryspec.BatterySpecificationPrinter();
+		return true;
+	}
+	else
+	{
+		return true;
+	}
 }
 
-bool StatusOfCharge::BatteryChargingStatus(float remainBatteryStatus)
+bool StatusOfCharge::BatteryChargingStatus(float BatteryStatus)
 {
-	StatusOfCharge::currentBatteryStatus = remainBatteryStatus;
-	cout << "-------------------------------------------------Battery status (SOC) --------------------------------------------------------" << endl;
-	if (highStatus("B_status"))
-	{
-		return true;
-	}
-	if (lowStatus("B_status"))
-	{
-		return true;
-	}
+	int returnCode = 0;
+	StatusOfCharge::currentBatteryStatus = BatteryStatus;
 
-	
+	if (currentBatteryStatus <= lowBatteryStatus)
+	{
+		cout << "Battery is critical !" << endl;
+		returnCode = 1;
+	}
+	else if (currentBatteryStatus <= lowBatteryStatusEarlyWarning)
+	{
+		cout << "warning : Battery is low !" << endl;
+		returnCode = 1;
+	}
+	if (currentBatteryStatus == fullBatteryStatusEarlyWarning)
+	{
+		cout << "Battery is completely charged!! please disconnect charger !" << endl;
+		returnCode = 1;
+	}
+	else if (currentBatteryStatus >= fullBatteryStatusEarlyWarning)
+	{
+		cout << "warning : battery is about to charge ! Please disconnect !" << endl;
+		returnCode = 1;
+	}
+	else
+	{
+		cout << "Battery is normal charged !" << endl;
+		returnCode = 1;
+	}
+	if (returnCode != 0)
+	{
+		return true;
+	}
 }
-	
