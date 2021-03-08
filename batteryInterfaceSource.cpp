@@ -137,30 +137,12 @@ bool StatusOfCharge::BatteryChargingStatus(float BatteryStatus)
 	if (currentBatteryStatus <= lowBatteryStatus)
 	{
 		cout << "Battery is critical !" << endl;
-		returnCode = 1;
+		return true;
 	}
 	else if (currentBatteryStatus <= lowBatteryStatusEarlyWarning)
 	{
 		cout << "warning : Battery is low !" << endl;
-		returnCode = 1;
-	}
-	if (currentBatteryStatus == fullBatteryStatusEarlyWarning)
-	{
-		cout << "Battery is completely charged!! please disconnect charger !" << endl;
-		returnCode = 1;
-	}
-	else if (currentBatteryStatus >= fullBatteryStatusEarlyWarning)
-	{
-		cout << "warning : battery is about to charge ! Please disconnect !" << endl;
-		returnCode = 1;
-	}
-	else
-	{
-		cout << "Battery is normal charged !" << endl;
-		returnCode = 1;
-	}
-	if (returnCode != 0)
-	{
 		return true;
 	}
+	
 }
