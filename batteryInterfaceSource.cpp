@@ -80,31 +80,31 @@ bool StatusOfCharge::lowStatus(string checkFor)
 	{
 		if (BatteryElements::voltage <= VoltageIndicator::voltageMinThreshould)
 		{
-			cout << "Low voltage Breach! Please check the Voltage level !";
+			cout << "Low voltage Breach! Please check the Voltage level !" << endl;
 			return true;
 		}
 		if (BatteryElements::voltage <= VoltageIndicator::voltageMinWarning)
 		{
-			cout << "warning : Low voltage! Please check the Voltage level !";
+			cout << "warning : Low voltage! Please check the Voltage level !" << endl;
 			return true;
 		}
 		else
 		{
-			cout << "voltage is normal !";
+			cout << "voltage is normal !" << endl;
 			return true;
 		}
 	}
 
 	if (checkFor == "Current")
 	{
-		if (BatteryElements::voltage <= CurrentIndicator::currentMinThreshould)
+		if (BatteryElements::current <= CurrentIndicator::currentMinThreshould)
 		{
-			cout << "Low current Breach! Please check the current level !";
+			cout << "Low current Breach! Please check the current level !" << endl;
 			return true;
 		}
 		if (BatteryElements::current <= CurrentIndicator::currentMinWarning)
 		{
-			cout << "warning : Low current! Please check the current level !";
+			cout << "warning : Low current! Please check the current level !" << endl;
 			return true;
 		}
 		else
@@ -118,17 +118,17 @@ bool StatusOfCharge::lowStatus(string checkFor)
 	{
 		if (BatteryElements::temprature <= TempratureIndicator::temperatureMinThreshould)
 		{
-			cout << "Low voltage Breach! Please check the Voltage level !";
+			cout << "Low voltage Breach! Please check the Voltage level !" << endl;
 			return true;
 		}
 		if (BatteryElements::temprature <= TempratureIndicator::temperatureMinThreshouldWarning)
 		{
-			cout << "Low voltage Warning! Please check the Voltage level !";
+			cout << "Low voltage Warning! Please check the Voltage level !"<<endl;
 			return true;
 		}
 		else
 		{
-			cout << "! Battery Temperature is normal !";
+			cout << "Battery Temperature is normal !"<<endl;
 			return true;
 		}
 	}
@@ -156,43 +156,36 @@ bool StatusOfCharge::highStatus(string checkFor)
 
 bool CurrentIndicator::currentStatus()
 {
-	if(currentMinThreshould >= BatteryElements::current || currentMaxThreshould <= BatteryElements::current)
-		{
-			cout << "Charge current Rate out of range!\n";
-			return false;
-		}
-	else
-		{
+	StatusOfCharge C_Soc;
+	if(C_Soc.lowStatus("Current"))
+	    {
 			return true;
 		}
+
 }
 
 bool VoltageIndicator::voltageStatus()
 {
-	CurrentIndicator Currentindicator;
-	if (voltageMinThreshould >= BatteryElements::voltage || vOltageMaxThreshould <= BatteryElements::voltage)
-		{
-			cout << "Charge voltage Rate out of range!\n";
-			return false;
+	StatusOfCharge V_Soc;
+	CurrentIndicator C_Indicator;
+	if (V_Soc.lowStatus("Voltage"))
+	    {		
+			return C_Indicator.currentStatus();
 		}
-	else
-		{
-			return Currentindicator.currentStatus();
-		}
+
+	
 }
 
 bool TempratureIndicator::tempratureStatus()
 {
-	VoltageIndicator Voltageindicator;
-	if (temperatureMinThreshould >= BatteryElements::temprature || temperatureMaxThreshould <= BatteryElements::temprature)
-		{
-			cout << "Charge tamperature of battery out of range!\n";
-			return false;
-		}
-	else
-		{
-			return Voltageindicator.voltageStatus();
-		}
+	StatusOfCharge T_Soc;
+	VoltageIndicator V_Indicator;
+	if(T_Soc.lowStatus("Temperature"))
+	    {
+			return V_Indicator.voltageStatus();
+	    }
+	
+	
 }
 
 BatteryIndicator::BatteryIndicator(float temp, float vol, float curr)
@@ -208,14 +201,15 @@ bool weatherIndicator::weatherStatus()
 	if (hotWeather < todaysTemperature)
 	{
 		cout << "Very High Temperature!! charge is not allowed !" << endl;
-		return false;
+		return true;
 	}
 	if (coldWeather > todaysTemperature)
 	{
 		cout << "Very Low Temperature!! charge is not allowed !" << endl;
-		return false;
+		return true;
 	}
 	return Tempratureindicator.tempratureStatus();
+
 }
 
 void weatherIndicator::TodaysTemperature(float temp)
@@ -232,10 +226,7 @@ bool StateOfChargeRate::batteryRequirements_For_Charging()
 		    Batteryspec.BatterySpecificationPrinter();
 			return true;
 		}
-	else
-		{
-			return false;
-		}
+	
 }
 
 bool StatusOfCharge::BatteryChargingStatus(float remainBatteryStatus)
