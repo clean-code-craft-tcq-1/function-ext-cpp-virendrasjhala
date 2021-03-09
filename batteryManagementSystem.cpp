@@ -14,7 +14,7 @@ int main() {
 	/*---------- temperature in Fahrenheit ----------*/
 
 	int setTodaysTemperature = -60;
-	int checkStatusofcharge  = 23;
+	int checkStatusofcharge  = 80;
 	float checkBatteryVoltage  = 1;
 	float checkBatteryCurrent  = 1.0;
 	/*-------------------------------------------input parameters----------------------------------------*/
@@ -22,8 +22,6 @@ int main() {
 	cout << "-------------------------------------------------Battery StateOfCharge(SOC) --------------------------------------------------" << endl;
 	StatusOfCharge statusofbattery;
 	assert(statusofbattery.BatteryChargingStatus(checkStatusofcharge) == true);
-	StatusOfCharge StatusOfChargeWarning;
-	assert(StatusOfChargeWarning.warining()== true);
 	
 	cout << "-------------------------------------------------Weather condition -----------------------------------------------------------" << endl;
 

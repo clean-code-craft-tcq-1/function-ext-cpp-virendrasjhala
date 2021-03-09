@@ -55,9 +55,6 @@ class StateOfChargeRate
 public:
 	static int fullBatteryStatus;
 	static int lowBatteryStatus;
-	static int warningThreshould;
-	static int lowBatteryStatusEarlyWarning;
-	static int fullBatteryStatusEarlyWarning;
 	
 	StateOfChargeRate() {}
 };

@@ -23,9 +23,6 @@ float TempratureIndicator::temperatureMaxThreshould = 50;
 
 int   StateOfChargeRate::fullBatteryStatus = 80;
 int   StateOfChargeRate::lowBatteryStatus = 20;
-int   StateOfChargeRate::warningThreshould = fullBatteryStatus * 0.05;
-int   StateOfChargeRate::lowBatteryStatusEarlyWarning = lowBatteryStatus + warningThreshould;
-int   StateOfChargeRate::fullBatteryStatusEarlyWarning = fullBatteryStatus - warningThreshould;
 
 int   StatusOfCharge::currentBatteryStatus;
 float weatherIndicator::todaysTemperature;
@@ -44,27 +41,39 @@ void BatterySpecification::BatterySpecificationPrinter()
 
 bool CurrentIndicator::currentStatus()
 {
-	if (currentMinThreshould >= BatteryElements::current || currentMaxThreshould <= BatteryElements::current)
+	if (currentMinThreshould >= BatteryElements::current)
 	{
-		cout << "Charge current Rate out of range !" << endl;
+		cout << "Charge current Rate is low !" << endl;
+	}
+	if (currentMaxThreshould <= BatteryElements::current)
+	{
+		cout << "Charge current Rate is high !" << endl;
 	}
 	return true;
 }
 
 bool VoltageIndicator::voltageStatus()
 {
-	if (voltageMinThreshould >= BatteryElements::voltage || vOltageMaxThreshould <= BatteryElements::voltage)
+	if (voltageMinThreshould >= BatteryElements::voltage)
 	{
-		cout << "Charge voltage Rate out of range !" << endl;
+		cout << "Charge voltage Rate is low !" << endl;
+	}
+	if (vOltageMaxThreshould <= BatteryElements::voltage)
+	{
+		cout << "Charge voltage Rate is high !" << endl;
 	}
 	return true;
 }
 
 bool TempratureIndicator::tempratureStatus()
 {
-	if (temperatureMinThreshould >= BatteryElements::temprature || temperatureMaxThreshould <= BatteryElements::temprature)
+	if (temperatureMinThreshould >= BatteryElements::temprature)
 	{
-		cout << "Charge tamperature of battery out of range !" << endl;
+		cout << "Charge tamperature of battery is low !" << endl;
+	}
+	if (temperatureMaxThreshould <= BatteryElements::temprature)
+	{
+		cout << "Charge tamperature of battery is high !" << endl;
 	}
 	return true;
 }
@@ -109,15 +118,6 @@ bool weatherIndicator::weatherStatus(int todaysTemperature)
 	if (coldWeather > todaysTemperature)
 	{
 		cout << "Very Low weather Temperature!! charge is not allowed !" << endl;
-	}
-	return true;
-}
-
-bool StatusOfCharge::warining()
-{
-	if (lowBatteryStatusEarlyWarning >= currentBatteryStatus && lowBatteryStatus < currentBatteryStatus)
-	{
-		cout << "warning : battery is low !" << endl;
 	}
 	return true;
 }
