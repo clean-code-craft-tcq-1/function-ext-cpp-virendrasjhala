@@ -67,7 +67,6 @@ class StatusOfCharge :public StateOfChargeRate, public VoltageIndicator
 public:
 	static int currentBatteryStatus;
 	StatusOfCharge() {}
-	bool warningsForSoc();
 	bool BatteryChargingStatus(float BatteryStatus);
 	
 };

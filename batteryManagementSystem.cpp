@@ -24,9 +24,9 @@ int main() {
 	WeatherHandler.TodaysTemperature(setTodaysTemperature);
 
 	/*-------------------------------------------StatusOfCharge(soc)------------------------------------------*/
-	StatusOfCharge statusofbattery, warningsforsoc;
+	StatusOfCharge statusofbattery;
 	assert(statusofbattery.BatteryChargingStatus(checkStatusofcharge) == true);
-	assert(warningsforsoc.warningsForSoc() == true);
+	
 
 	/*-------------------------------------------Weather status------------------------------------------*/
 	StateOfChargeRate   battery_charging_check;
