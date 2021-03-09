@@ -1,6 +1,9 @@
 #pragma once
 #include <assert.h>
 #include <iostream>
+#include <map>
+#include <utility>
+
 using namespace std;
 
 
@@ -80,10 +83,6 @@ class LanguageSupported
 public:
 	static string language;
 	void selectLanguage(string lang);
-};
-
-namespace database
-{
 	map<pair<string, string>, string > status{ { make_pair("LOW_SOC_BREACH","eng"),"Battery is critical !" },{ make_pair("HIGH_SOC_BREACH","eng"),     "Battery is full charged ! Please disconnect !" },
 	{ make_pair("LOW_TEMP_BREACH","eng") ,    "Very Low weather Temperature!! charge is not allowed !" },{ make_pair("HIGH_TEMP_BREACH","eng"),    "Very high weather Temperature!! charge is not allowed !" },
 	{ make_pair("LOW_CURRENT_BREACH","eng"),  "Charge current Rate is low !" },{ make_pair("HIGH_CURRENT_BREACH","eng"), "Charge current Rate is high !" },
@@ -117,6 +116,6 @@ namespace database
 	{ make_pair("C_Min","Gmn"),			      "C_Mindest" },{ make_pair("C_Max","Gmn"),	        "C_Max" },
 	{ make_pair("Curr_actual","Gmn"),		  "C_tatsächlich" },{ make_pair("V_Min","Gmn"),		    "V_Mindest" },
 	{ make_pair("V_Max","Gmn"),		          "V_Max" },{ make_pair("Volt_actual","Gmn"),   "V_tatsächlich" },
-
 	};
-}
+};
+
