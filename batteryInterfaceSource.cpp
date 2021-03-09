@@ -23,6 +23,10 @@ float TempratureIndicator::temperatureMaxThreshould = 50;
 
 int   StateOfChargeRate::fullBatteryStatus = 80;
 int   StateOfChargeRate::lowBatteryStatus = 20;
+int   StateOfChargeRate::warningThreshould = fullBatteryStatus * 0.05;
+int   StateOfChargeRate::lowBatteryStatusEarlyWarning = lowBatteryStatus + warningThreshould;
+int   StateOfChargeRate::fullBatteryStatusEarlyWarning = fullBatteryStatus - warningThreshould;
+
 
 int   StatusOfCharge::currentBatteryStatus;
 float weatherIndicator::todaysTemperature;
@@ -140,19 +144,37 @@ bool StateOfChargeRate::batteryRequirements_For_Charging()
 	}
 }
 
+bool warningsForSoc()
+{
+	if (StatusOfCharge::currentBatteryStatus <= StatusOfCharge::lowBatteryStatusEarlyWarning && StatusOfCharge::currentBatteryStatus > StatusOfCharge::lowBatteryStatus)
+	{
+		cout << "Warning : battery is low !" << endl;
+		return true;
+	}
+	if (StatusOfCharge::currentBatteryStatus >= StatusOfCharge::fullBatteryStatusEarlyWarning && StatusOfCharge::currentBatteryStatus != StatusOfCharge::fullBatteryStatus)
+	{
+		cout << " Warning : battery is about to charge! Please dissconnect !" << endl;
+		return true;
+	}
+	return false;
+}
+
 bool StatusOfCharge::BatteryChargingStatus(float BatteryStatus)
 {
 	cout << "-------------------------------------------------Battery StateOfCharge(SOC) --------------------------------------------------" << endl;
 	StatusOfCharge::currentBatteryStatus = BatteryStatus;
-	if (currentBatteryStatus <= lowBatteryStatus )
+	if (!warningsForSoc())
 	{
-		cout << "Battery is critical !" << endl;
-		return true;
+		if (currentBatteryStatus <= lowBatteryStatus)
+		{
+			cout << "Battery is critical !" << endl;
+			return true;
+		}
+		if (currentBatteryStatus == fullBatteryStatus)
+		{
+			cout << "warning : Battery is full charged ! Please disconnect !" << endl;
+			return true;
+		}
 	}
-	if (currentBatteryStatus == fullBatteryStatus)
-	{
-		cout << "warning : Battery is full charged ! Please disconnect !" << endl;
-		return true;
-	}
-	
+	return true;
 }

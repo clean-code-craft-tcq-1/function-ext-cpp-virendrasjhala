@@ -14,7 +14,7 @@ int main() {
 	/*---------- temperature in Fahrenheit ----------*/
 
 	float setTodaysTemperature = 23;
-	int   checkStatusofcharge  = 19;
+	int   checkStatusofcharge  = 75;
 	float checkBatteryVoltage  = 4;
 	float checkBatteryCurrent  = 1.0;
 	/*-------------------------------------------input parameters----------------------------------------*/
