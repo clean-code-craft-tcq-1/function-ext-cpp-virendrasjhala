@@ -13,35 +13,33 @@ int main() {
 	string checkBatteryTemperature = "44C"; 
 	/*---------- temperature in Fahrenheit ----------*/
 
-	float setTodaysTemperature = 23;
-	int   checkStatusofcharge  = 12;
-	float checkBatteryVoltage  = 4;
+	int setTodaysTemperature = -60;
+	int checkStatusofcharge  = 23;
+	float checkBatteryVoltage  = 1;
 	float checkBatteryCurrent  = 1.0;
 	/*-------------------------------------------input parameters----------------------------------------*/
 
-	/*--------------------------------------------weather status-----------------------------------------*/
-	weatherIndicator WeatherHandler;
-	WeatherHandler.TodaysTemperature(setTodaysTemperature);
-
-	/*-------------------------------------------StatusOfCharge(soc)------------------------------------------*/
+	cout << "-------------------------------------------------Battery StateOfCharge(SOC) --------------------------------------------------" << endl;
 	StatusOfCharge statusofbattery;
 	assert(statusofbattery.BatteryChargingStatus(checkStatusofcharge) == true);
+	StatusOfCharge StatusOfChargeWarning;
+	assert(StatusOfChargeWarning.warining()== true);
 	
+	cout << "-------------------------------------------------Weather condition -----------------------------------------------------------" << endl;
 
-	/*-------------------------------------------Weather status------------------------------------------*/
-	StateOfChargeRate   battery_charging_check;
-	assert(battery_charging_check.batteryRequirements_For_Charging() == true);
+	weatherIndicator   weatherindicator;
+	assert(weatherindicator.weatherStatus(setTodaysTemperature) == true);
 
-	/*---------------------------------------battery Charging rate conditions check---------------------------*/
+	cout << "-------------------------------------------------Battery specification -------------------------------------------------------" << endl;
 	BatteryIndicator Batteryindicator(checkBatteryTemperature, checkBatteryVoltage, checkBatteryCurrent);
+
+	cout << "-------------------------------------------------Battery charging rate -------------------------------------------------------" << endl;
 	TempratureIndicator T_Indicator;
 	VoltageIndicator    V_Indicator;
 	CurrentIndicator    C_Indicator;
 	assert(T_Indicator.tempratureStatus() == true);
 	assert(V_Indicator.voltageStatus()    == true);
 	assert(C_Indicator.currentStatus()    == true);
-
-	
 
 	//system("pause");
 }

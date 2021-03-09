@@ -19,8 +19,8 @@ public:
 class CurrentIndicator
 {
 public:
-	static float currentMinThreshould;
-	static float currentMaxThreshould;
+	static double currentMinThreshould;
+	static double currentMaxThreshould;
 
 	bool currentStatus();
 	
@@ -58,17 +58,16 @@ public:
 	static int warningThreshould;
 	static int lowBatteryStatusEarlyWarning;
 	static int fullBatteryStatusEarlyWarning;
-
+	
 	StateOfChargeRate() {}
-	bool batteryRequirements_For_Charging();
 };
-class StatusOfCharge :public StateOfChargeRate, public VoltageIndicator
+class StatusOfCharge :public StateOfChargeRate
 {
 public:
 	static int currentBatteryStatus;
 	StatusOfCharge() {}
-	bool BatteryChargingStatus(float BatteryStatus);
-	
+	bool BatteryChargingStatus(int BatteryStatus);
+	bool warining();
 };
 class weatherIndicator 
 {
@@ -76,6 +75,6 @@ public:
 	static float hotWeather;
 	static float coldWeather;
 	static float todaysTemperature;
-	void TodaysTemperature(float temp);
-	bool weatherStatus();
+
+	bool weatherStatus(int todaysTemperature);
 };
