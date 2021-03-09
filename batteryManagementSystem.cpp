@@ -14,7 +14,7 @@ int main() {
 	/*---------- temperature in Fahrenheit ----------*/
 
 	float setTodaysTemperature = 23;
-	int   checkStatusofcharge  = 75;
+	int   checkStatusofcharge  = 12;
 	float checkBatteryVoltage  = 4;
 	float checkBatteryCurrent  = 1.0;
 	/*-------------------------------------------input parameters----------------------------------------*/
@@ -24,8 +24,9 @@ int main() {
 	WeatherHandler.TodaysTemperature(setTodaysTemperature);
 
 	/*-------------------------------------------StatusOfCharge(soc)------------------------------------------*/
-	StatusOfCharge statusofbattery;
+	StatusOfCharge statusofbattery, warningsforsoc;
 	assert(statusofbattery.BatteryChargingStatus(checkStatusofcharge) == true);
+	assert(warningsforsoc.warningsForSoc() == true);
 
 	/*-------------------------------------------Weather status------------------------------------------*/
 	StateOfChargeRate   battery_charging_check;
