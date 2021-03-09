@@ -4,36 +4,25 @@
 #include "batteryInterface.h"
 #include <iomanip>
 #include <map>
+#include <sstream>  
+
 using namespace std;
 
-float BatteryElements::temprature;
+int BatteryElements::temprature;
 float BatteryElements::voltage;
 float BatteryElements::current;
 
 float CurrentIndicator::currentMinThreshould = 0.8;
 float CurrentIndicator::currentMaxThreshould = 1.2;
-float CurrentIndicator::currentWarning = currentMaxThreshould * 0.05;
-float CurrentIndicator::currentMaxWarning = currentMinThreshould + currentWarning;
-float CurrentIndicator::currentMinWarning = currentMaxThreshould - currentWarning;
 
 float VoltageIndicator::voltageMinThreshould = 3;
 float VoltageIndicator::vOltageMaxThreshould = 6;
-float VoltageIndicator::voltageWarning = vOltageMaxThreshould * 0.05;
-float VoltageIndicator::voltageMaxWarning = voltageMinThreshould + voltageWarning;
-float VoltageIndicator::voltageMinWarning = vOltageMaxThreshould - voltageWarning;
 
 float TempratureIndicator::temperatureMinThreshould = -20;
 float TempratureIndicator::temperatureMaxThreshould = 50;
-float TempratureIndicator::temperatureWarning = temperatureMaxThreshould * 0.05;
-float TempratureIndicator::temperatureMinThreshouldWarning = temperatureMinThreshould + temperatureWarning;
-float TempratureIndicator::temperatureMaxThreshouldWarning = temperatureMaxThreshould - temperatureWarning;
-
 
 int   StateOfChargeRate::fullBatteryStatus = 80;
 int   StateOfChargeRate::lowBatteryStatus = 20;
-int   StateOfChargeRate::warningThreshould = fullBatteryStatus * 0.05;
-int   StateOfChargeRate::lowBatteryStatusEarlyWarning = lowBatteryStatus + warningThreshould;
-int   StateOfChargeRate::fullBatteryStatusEarlyWarning = fullBatteryStatus - warningThreshould;
 
 int   StatusOfCharge::currentBatteryStatus;
 float weatherIndicator::todaysTemperature;
@@ -86,11 +75,34 @@ bool TempratureIndicator::tempratureStatus()
 	return true;
 }
 
-BatteryIndicator::BatteryIndicator(float temp, float vol, float curr)
+int temperatureConversion(string temp)
+{
+	int measurement;
+	string unit;
+	std::stringstream ss;
+	ss << temp;
+	ss >> measurement >> unit;
+
+	if ("F" == unit)
+	{
+		return  (measurement - 32) * 5 / 9;
+	}
+	
+	return measurement;
+}
+BatteryIndicator::BatteryIndicator(string temp, float vol, float curr)
 {
 	current = curr;
 	voltage = vol;
-	temprature = temp;
+
+	/*----temperature conversion----*/
+
+	temprature = temperatureConversion(temp);
+
+	/*----temperature conversion----*/
+
+	BatterySpecification Batteryspec;
+	Batteryspec.BatterySpecificationPrinter();
 }
 
 bool weatherIndicator::weatherStatus()
@@ -117,10 +129,9 @@ void weatherIndicator::TodaysTemperature(float temp)
 bool StateOfChargeRate::batteryRequirements_For_Charging()
 {
 	weatherIndicator wheaterHandler;
-	BatterySpecification Batteryspec;
+	
 	if (wheaterHandler.weatherStatus())
 	{
-		Batteryspec.BatterySpecificationPrinter();
 		return true;
 	}
 	else
@@ -131,27 +142,17 @@ bool StateOfChargeRate::batteryRequirements_For_Charging()
 
 bool StatusOfCharge::BatteryChargingStatus(float BatteryStatus)
 {
+	cout << "-------------------------------------------------Battery StateOfCharge(SOC) --------------------------------------------------" << endl;
 	StatusOfCharge::currentBatteryStatus = BatteryStatus;
-	map<string, int> status{ {"LOW_SOC_4BREACH",StateOfChargeRate::lowBatteryStatus },
-						   {"LOW_SOC_3WARNING",StateOfChargeRate::lowBatteryStatusEarlyWarning },
-						   {"HIGH_SOC_2WARNING", StateOfChargeRate::fullBatteryStatusEarlyWarning },
-						   {"HIGH_SOC_1BREACH",StateOfChargeRate::fullBatteryStatus } 
-							};
-
-	for (const auto & checkStatus : status)
+	if (currentBatteryStatus <= lowBatteryStatus )
 	{
-		if ((currentBatteryStatus >= checkStatus.second ))
-		{
-			cout << checkStatus.first.data() << endl;
-			break;
-		}
-		else if ((currentBatteryStatus <= status["LOW_SOC_3WARNING"]) && (currentBatteryStatus > status["LOW_SOC_4BREACH"]) )
-		{
-			cout << "low SOC !"<< endl;
-			break;
-		}
-
+		cout << "Battery is critical !" << endl;
+		return true;
 	}
-	return true;
+	if (currentBatteryStatus == fullBatteryStatus)
+	{
+		cout << "warning : Battery is full charged ! Please disconnect !" << endl;
+		return true;
+	}
 	
 }

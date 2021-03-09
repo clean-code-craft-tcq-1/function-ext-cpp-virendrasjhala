@@ -8,11 +8,15 @@ using namespace std;
 int main() {
 
 	/*-------------------------------------------input parameters----------------------------------------*/
-	float setTodaysTemperature    = 23;
-	int   checkStatusofcharge     = 80;
-	float checkBatteryTemperature = 21;
-	float checkBatteryVoltage     = 4;
-	float checkBatteryCurrent     = 1.0;
+	
+	/*---------- temperature in Fahrenheit ----------*/
+	string checkBatteryTemperature = "44C"; 
+	/*---------- temperature in Fahrenheit ----------*/
+
+	float setTodaysTemperature = 23;
+	int   checkStatusofcharge  = 19;
+	float checkBatteryVoltage  = 4;
+	float checkBatteryCurrent  = 1.0;
 	/*-------------------------------------------input parameters----------------------------------------*/
 
 	/*--------------------------------------------weather status-----------------------------------------*/
@@ -23,9 +27,12 @@ int main() {
 	StatusOfCharge statusofbattery;
 	assert(statusofbattery.BatteryChargingStatus(checkStatusofcharge) == true);
 
+	/*-------------------------------------------Weather status------------------------------------------*/
+	StateOfChargeRate   battery_charging_check;
+	assert(battery_charging_check.batteryRequirements_For_Charging() == true);
+
 	/*---------------------------------------battery Charging rate conditions check---------------------------*/
 	BatteryIndicator Batteryindicator(checkBatteryTemperature, checkBatteryVoltage, checkBatteryCurrent);
-	StateOfChargeRate   battery_charging_check;
 	TempratureIndicator T_Indicator;
 	VoltageIndicator    V_Indicator;
 	CurrentIndicator    C_Indicator;
@@ -33,7 +40,7 @@ int main() {
 	assert(V_Indicator.voltageStatus()    == true);
 	assert(C_Indicator.currentStatus()    == true);
 
-	assert(battery_charging_check.batteryRequirements_For_Charging() == true);
+	
 
 	//system("pause");
 }
