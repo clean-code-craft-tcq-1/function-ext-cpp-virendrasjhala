@@ -8,7 +8,7 @@
 
 using namespace std;
 
-int BatteryElements::temprature;
+int BatteryElements::temperature;
 float BatteryElements::voltage;
 float BatteryElements::current;
 
@@ -29,11 +29,16 @@ float weatherIndicator::todaysTemperature;
 float weatherIndicator::hotWeather  = 70;
 float weatherIndicator::coldWeather = -50;
 
+string LanguageSupported::language;
+
 void BatterySpecification::BatterySpecificationPrinter()
 {
-	cout << "    || Wheather status || " << "           ||Battery status || " << "                         ||Battery current/voltage||" << endl;
-	cout << "Temp       "    <<"                        B_Tmptr| "<<"low| "<< "full| "<< "actual| "<<   "      C_Min| "<<"C_Max| "<<"Curr_actual| "<<"V_Min| "<<"V_Max| "<<"Volt_actual| "<<endl;
-	cout << weatherIndicator::todaysTemperature     <<"`C"   << setw(33)   << BatteryElements::temprature            <<"`C" <<"    "    << StateOfChargeRate::lowBatteryStatus <<"%"<<"   "
+	cout << "    || "<< database::status[{"W_status", LanguageSupported::language}]<<"|| " << "           ||"<< database::status[{"B_status", LanguageSupported::language}]<<"|| " << "                         ||"<< database::status[{"B_current_voltage", LanguageSupported::language}] <<"||" << endl;
+	cout << ""      << database::status[{"Temp", LanguageSupported::language}]    <<"       "     <<"                        "<< database::status[{"B_Tmptr", LanguageSupported::language}] <<"| "<<""<< database::status[{"low", LanguageSupported::language}] <<"| "<< ""<< database::status[{"full", LanguageSupported::language}]
+		 <<"| "<< ""<< database::status[{"actual", LanguageSupported::language}]<<"| "<<   "      "<< database::status[{"C_Min", LanguageSupported::language}]<<"| "<<""<< database::status[{"C_Max", LanguageSupported::language}]<<"| "<<""<< database::status[{"Curr_actual", LanguageSupported::language}] <<"| "<<""
+		 << database::status[{"V_Min", LanguageSupported::language}]<<"| "<<""<< database::status[{"V_Max", LanguageSupported::language}]<<"| "<<""<< database::status[{"Volt_actual", LanguageSupported::language}]<<"| "<<endl;
+
+	cout << weatherIndicator::todaysTemperature     <<"`C"   << setw(33)   << BatteryElements::temperature <<"`C" <<"    "    << StateOfChargeRate::lowBatteryStatus <<"%"<<"   "
 		 << StateOfChargeRate::fullBatteryStatus <<"%"    <<"   "        << StatusOfCharge::currentBatteryStatus <<"%"  << setw(14) << CurrentIndicator::currentMinThreshould <<"E"
 		 << "   "  << CurrentIndicator::currentMaxThreshould <<"E"<<"      "<< BatteryElements::current              <<"E"  << setw(9) 
 		 << VoltageIndicator::voltageMinThreshould  <<"V"    << setw(7)     << VoltageIndicator::vOltageMaxThreshould <<"V" <<"      "  << BatteryElements::voltage               <<"V"<<endl;
@@ -43,11 +48,11 @@ bool CurrentIndicator::currentStatus()
 {
 	if (currentMinThreshould >= BatteryElements::current)
 	{
-		cout << "Charge current Rate is low !" << endl;
+		cout << database::status[{"LOW_CURRENT_BREACH", LanguageSupported::language}] << endl;
 	}
 	if (currentMaxThreshould <= BatteryElements::current)
 	{
-		cout << "Charge current Rate is high !" << endl;
+		cout << database::status[{"HIGH_CURRENT_BREACH", LanguageSupported::language}] << endl;
 	}
 	return true;
 }
@@ -56,24 +61,26 @@ bool VoltageIndicator::voltageStatus()
 {
 	if (voltageMinThreshould >= BatteryElements::voltage)
 	{
-		cout << "Charge voltage Rate is low !" << endl;
+		cout << database::status[{"LOW_VOLTAGE_BREACH", LanguageSupported::language}] << endl;
 	}
 	if (vOltageMaxThreshould <= BatteryElements::voltage)
 	{
-		cout << "Charge voltage Rate is high !" << endl;
+		cout << database::status[{"HIGH_VOLTAGE_BREACH", LanguageSupported::language}] << endl;
 	}
 	return true;
 }
 
-bool TempratureIndicator::tempratureStatus()
+bool TempratureIndicator::temperatureStatus()
 {
-	if (temperatureMinThreshould >= BatteryElements::temprature)
+	cout << "-------------------------------------------------"<< database::status[{"B_charging_rate", LanguageSupported::language}] <<" -------------------------------------------------------" << endl;
+	
+	if (temperatureMinThreshould >= BatteryElements::temperature)
 	{
-		cout << "Charge tamperature of battery is low !" << endl;
+		cout << database::status[{"LOW_B_TEMP_BREACH", LanguageSupported::language}] << endl;
 	}
-	if (temperatureMaxThreshould <= BatteryElements::temprature)
+	if (temperatureMaxThreshould <= BatteryElements::temperature)
 	{
-		cout << "Charge tamperature of battery is high !" << endl;
+		cout << database::status[{"HIGH_B_TEMP_BREACH", LanguageSupported::language}] << endl;
 	}
 	return true;
 }
@@ -96,12 +103,14 @@ int temperatureConversion(string temp)
 
 BatteryIndicator::BatteryIndicator(string temp, float vol, float curr)
 {
+	cout << "-------------------------------------------------"<< database::status[{"B_specification", LanguageSupported::language}]<<" -------------------------------------------------------" << endl;
+	
 	current = curr;
 	voltage = vol;
 
 	/*----temperature conversion----*/
 
-	temprature = temperatureConversion(temp);
+	temperature = temperatureConversion(temp);
 
 	/*----temperature conversion----*/
 
@@ -111,13 +120,15 @@ BatteryIndicator::BatteryIndicator(string temp, float vol, float curr)
 
 bool weatherIndicator::weatherStatus(int todaysTemperature)
 {
+	cout << "-------------------------------------------------"<< database::status[{"W_condition", LanguageSupported::language}] <<" ---------------------------------------------" << endl;
+	
 	if (hotWeather < todaysTemperature)
 	{
-		cout << "Very High weather Temperature!! charge is not allowed !" << endl;
+		cout << database::status[{"LOW_TEMP_BREACH", LanguageSupported::language}] << endl;
 	}
 	if (coldWeather > todaysTemperature)
 	{
-		cout << "Very Low weather Temperature!! charge is not allowed !" << endl;
+		cout << database::status[{"HIGH_TEMP_BREACH", LanguageSupported::language}] << endl;
 	}
 	return true;
 }
@@ -125,15 +136,23 @@ bool weatherIndicator::weatherStatus(int todaysTemperature)
 bool StatusOfCharge::BatteryChargingStatus(int BatteryStatus)
 {
 		StatusOfCharge::currentBatteryStatus = BatteryStatus;
-
+		cout << "-------------------------------------------------"<< database::status[{"B_SOC", LanguageSupported::language}]<<" --------------------------------------------------" << endl;
+		
 		if (currentBatteryStatus <= lowBatteryStatus)
 		{
-			cout << "Battery is critical !" << endl;
+			cout << database::status[{"LOW_SOC_BREACH", LanguageSupported::language}] << endl;
+			
 		}
 		if (currentBatteryStatus == fullBatteryStatus)
 		{
-			cout << "Battery is full charged ! Please disconnect !" << endl;
+			cout << database::status[{"HIGH_SOC_BREACH", LanguageSupported::language}] << endl;
 		}
 	
 	return true;
+}
+void LanguageSupported::selectLanguage(string lang)
+{
+	language = lang;
+	cout << "-------------------------------------------------"<< database::status[{"C_Language", LanguageSupported::language}]<< "--------------------------------------------------" << endl;
+	cout << language << endl;
 }

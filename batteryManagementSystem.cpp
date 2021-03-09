@@ -10,32 +10,35 @@ int main() {
 	/*-------------------------------------------input parameters----------------------------------------*/
 	
 	/*---------- temperature in Fahrenheit ----------*/
-	string checkBatteryTemperature = "44C"; 
+	string checkBatteryTemperature = "-10F"; 
 	/*---------- temperature in Fahrenheit ----------*/
 
-	int setTodaysTemperature = -60;
+	int setTodaysTemperature = 100;
 	int checkStatusofcharge  = 80;
 	float checkBatteryVoltage  = 1;
-	float checkBatteryCurrent  = 1.0;
-	/*-------------------------------------------input parameters----------------------------------------*/
+	float checkBatteryCurrent  = 2;
 
-	cout << "-------------------------------------------------Battery StateOfCharge(SOC) --------------------------------------------------" << endl;
+	/*---------- select language ----------*/
+	string language = "Gmn";
+	/*---------- select language ----------*/
+
+	/*-------------------------------------------input parameters----------------------------------------*/
+	
+	LanguageSupported languagesupported;
+	languagesupported.selectLanguage(language);
+
 	StatusOfCharge statusofbattery;
 	assert(statusofbattery.BatteryChargingStatus(checkStatusofcharge) == true);
 	
-	cout << "-------------------------------------------------Weather condition -----------------------------------------------------------" << endl;
-
 	weatherIndicator   weatherindicator;
 	assert(weatherindicator.weatherStatus(setTodaysTemperature) == true);
 
-	cout << "-------------------------------------------------Battery specification -------------------------------------------------------" << endl;
 	BatteryIndicator Batteryindicator(checkBatteryTemperature, checkBatteryVoltage, checkBatteryCurrent);
 
-	cout << "-------------------------------------------------Battery charging rate -------------------------------------------------------" << endl;
 	TempratureIndicator T_Indicator;
 	VoltageIndicator    V_Indicator;
 	CurrentIndicator    C_Indicator;
-	assert(T_Indicator.tempratureStatus() == true);
+	assert(T_Indicator.temperatureStatus() == true);
 	assert(V_Indicator.voltageStatus()    == true);
 	assert(C_Indicator.currentStatus()    == true);
 
