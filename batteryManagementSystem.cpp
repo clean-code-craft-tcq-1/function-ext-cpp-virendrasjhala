@@ -24,17 +24,22 @@ int main() {
 
 	/*-------------------------------------------input parameters----------------------------------------*/
 	
+	/*-------------------------------------------language selection--------------------------------------*/
 	LanguageSupported languagesupported;
 	languagesupported.selectLanguage(language);
 
+	/*-------------------------------------------stateOfCharge(SOC)--------------------------------------*/
 	StatusOfCharge statusofbattery;
 	assert(statusofbattery.BatteryChargingStatus(checkStatusofcharge) == true);
 	
+	/*-------------------------------------------weather Condition---------------------------------------*/
 	weatherIndicator   weatherindicator;
 	assert(weatherindicator.weatherStatus(setTodaysTemperature) == true);
 
+	/*-------------------------------------------battery requirements-------------------------------------*/
 	BatteryIndicator Batteryindicator(checkBatteryTemperature, checkBatteryVoltage, checkBatteryCurrent);
 
+	/*-------------------------------------------statusOfCharge rate--------------------------------------*/
 	TempratureIndicator T_Indicator;
 	VoltageIndicator    V_Indicator;
 	CurrentIndicator    C_Indicator;
@@ -42,5 +47,5 @@ int main() {
 	assert(V_Indicator.voltageStatus()    == true);
 	assert(C_Indicator.currentStatus()    == true);
 
-	//system("pause");
+	
 }

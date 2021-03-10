@@ -36,9 +36,9 @@ LanguageSupported languagesupported;
 void BatterySpecification::BatterySpecificationPrinter()
 {
 	cout << "    || "<< languagesupported.status[{"W_status", LanguageSupported::language}]<<"|| " << "           ||"<< languagesupported.status[{"B_status", LanguageSupported::language}]<<"|| " << "                         ||"<< languagesupported.status[{"B_current_voltage", LanguageSupported::language}] <<"||" << endl;
-	cout << ""      << languagesupported.status[{"Temp", LanguageSupported::language}]    <<"       "     <<"                        "<< languagesupported.status[{"B_Tmptr", LanguageSupported::language}] <<"| "<<""<< languagesupported.status[{"low", LanguageSupported::language}] <<"| "<< ""<< languagesupported.status[{"full", LanguageSupported::language}]
-		 <<"| "<< ""<< languagesupported.status[{"actual", LanguageSupported::language}]<<"| "<<   "      "<< languagesupported.status[{"C_Min", LanguageSupported::language}]<<"| "<<""<< languagesupported.status[{"C_Max", LanguageSupported::language}]<<"| "<<""<< languagesupported.status[{"Curr_actual", LanguageSupported::language}] <<"| "<<""
-		 << languagesupported.status[{"V_Min", LanguageSupported::language}]<<"| "<<""<< languagesupported.status[{"V_Max", LanguageSupported::language}]<<"| "<<""<< languagesupported.status[{"Volt_actual", LanguageSupported::language}]<<"| "<<endl;
+	cout << ""      << languagesupported.status[{"Temp", LanguageSupported::language}]    <<"       "     <<"                        "<< languagesupported.status[{"B_Tmptr", LanguageSupported::language}] <<"| "<<""<< languagesupported.status[{"low", LanguageSupported::language}] <<"| "<< ""
+		 << languagesupported.status[{"full", LanguageSupported::language}] <<"| "<< ""<< languagesupported.status[{"actual", LanguageSupported::language}]<<"| "<<   "      "<< languagesupported.status[{"C_Min", LanguageSupported::language}]<<"| "<<""<< languagesupported.status[{"C_Max", LanguageSupported::language}]<<"| "<<""
+		<< languagesupported.status[{"Curr_actual", LanguageSupported::language}] <<"| "<<""<< languagesupported.status[{"V_Min", LanguageSupported::language}]<<"| "<<""<< languagesupported.status[{"V_Max", LanguageSupported::language}]<<"| "<<""<< languagesupported.status[{"Volt_actual", LanguageSupported::language}]<<"| "<<endl;
 
 	cout << weatherIndicator::todaysTemperature     <<"`C"   << setw(33)   << BatteryElements::temperature <<"`C" <<"    "    << StateOfChargeRate::lowBatteryStatus <<"%"<<"   "
 		 << StateOfChargeRate::fullBatteryStatus <<"%"    <<"   "        << StatusOfCharge::currentBatteryStatus <<"%"  << setw(14) << CurrentIndicator::currentMinThreshould <<"E"
@@ -105,7 +105,7 @@ int temperatureConversion(string temp)
 
 BatteryIndicator::BatteryIndicator(string temp, float vol, float curr)
 {
-	cout << "-------------------------------------------------"<< languagesupported.status[{"B_specification", LanguageSupported::language}]<<" -------------------------------------------------------" << endl;
+	cout << "-------------------------------------------------"<< languagesupported.status[{"B_specification", LanguageSupported::language}]<<" ---------------------- ------------------" << endl;
 	
 	current = curr;
 	voltage = vol;
@@ -152,6 +152,7 @@ bool StatusOfCharge::BatteryChargingStatus(int BatteryStatus)
 	
 	return true;
 }
+
 void LanguageSupported::selectLanguage(string lang)
 {
 	language = lang;
