@@ -3,7 +3,7 @@
 #include <iostream>
 #include <map>
 #include <utility>
-
+#include <vector>
 using namespace std;
 
 
@@ -18,6 +18,9 @@ class BatterySpecification:public BatteryElements
 {
 public:
 	void BatterySpecificationPrinter();
+	
+	vector<string>batteryHeadingsPrinter;
+	
 };
 class CurrentIndicator
 {
@@ -46,11 +49,11 @@ public:
 	bool temperatureStatus();
 	
 };
-class BatteryIndicator :public BatteryElements
+class BatteryParameters :public BatteryElements
 {
 public:
-	BatteryIndicator() {}
-	BatteryIndicator(string temp, float vol, float curr);
+	BatteryParameters() {}
+	BatteryParameters(string temp, float vol, float curr);
 	
 };
 class StateOfChargeRate
@@ -67,7 +70,7 @@ public:
 	static int currentBatteryStatus;
 	StatusOfCharge() {}
 	bool BatteryChargingStatus(int BatteryStatus);
-	bool warining();
+	
 };
 class weatherIndicator 
 {

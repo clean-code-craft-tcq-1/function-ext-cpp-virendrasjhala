@@ -6,6 +6,7 @@
 #include <sstream>  
 #include <map>
 #include <utility>
+#include <vector>
 using namespace std;
 
 int BatteryElements::temperature;
@@ -35,15 +36,35 @@ LanguageSupported languagesupported;
 
 void BatterySpecification::BatterySpecificationPrinter()
 {
-	cout << "    || "<< languagesupported.status[{"W_status", LanguageSupported::language}]<<"|| " << "           ||"<< languagesupported.status[{"B_status", LanguageSupported::language}]<<"|| " << "                         ||"<< languagesupported.status[{"B_current_voltage", LanguageSupported::language}] <<"||" << endl;
-	cout << ""      << languagesupported.status[{"Temp", LanguageSupported::language}]    <<"       "     <<"                        "<< languagesupported.status[{"B_Tmptr", LanguageSupported::language}] <<"| "<<""<< languagesupported.status[{"low", LanguageSupported::language}] <<"| "<< ""
-		 << languagesupported.status[{"full", LanguageSupported::language}] <<"| "<< ""<< languagesupported.status[{"actual", LanguageSupported::language}]<<"| "<<   "      "<< languagesupported.status[{"C_Min", LanguageSupported::language}]<<"| "<<""<< languagesupported.status[{"C_Max", LanguageSupported::language}]<<"| "<<""
-		<< languagesupported.status[{"Curr_actual", LanguageSupported::language}] <<"| "<<""<< languagesupported.status[{"V_Min", LanguageSupported::language}]<<"| "<<""<< languagesupported.status[{"V_Max", LanguageSupported::language}]<<"| "<<""<< languagesupported.status[{"Volt_actual", LanguageSupported::language}]<<"| "<<endl;
-
-	cout << weatherIndicator::todaysTemperature     <<"`C"   << setw(33)   << BatteryElements::temperature <<"`C" <<"    "    << StateOfChargeRate::lowBatteryStatus <<"%"<<"   "
-		 << StateOfChargeRate::fullBatteryStatus <<"%"    <<"   "        << StatusOfCharge::currentBatteryStatus <<"%"  << setw(14) << CurrentIndicator::currentMinThreshould <<"E"
-		 << "   "  << CurrentIndicator::currentMaxThreshould <<"E"<<"      "<< BatteryElements::current              <<"E"  << setw(9) 
-		 << VoltageIndicator::voltageMinThreshould  <<"V"    << setw(7)     << VoltageIndicator::vOltageMaxThreshould <<"V" <<"      "  << BatteryElements::voltage               <<"V"<<endl;
+	
+	
+	vector<string> batteryHeadingsPrinter{ languagesupported.status[{"W_status", LanguageSupported::language}],  string(20,' '),
+								   languagesupported.status[{"B_status", LanguageSupported::language}],          string(20,' '),
+								   languagesupported.status[{"B_current_voltage", LanguageSupported::language}], "\n",
+								   languagesupported.status[{"Temp", LanguageSupported::language}],              string(24,' '),
+								   languagesupported.status[{"B_Tmptr", LanguageSupported::language}],			 string(1, '|'),
+								   languagesupported.status[{"low", LanguageSupported::language}],				 string(1, '|'),
+								   languagesupported.status[{"full", LanguageSupported::language}],				 string(1, '|'),
+								   languagesupported.status[{"actual", LanguageSupported::language}],			 string(12,' '),
+								   languagesupported.status[{"C_Min", LanguageSupported::language}],			 string(1, '|'),
+								   languagesupported.status[{"C_Max", LanguageSupported::language}],			 string(1, '|'),
+								   languagesupported.status[{"Curr_actual", LanguageSupported::language}],		 string(3, ' '),
+								   languagesupported.status[{"V_Min", LanguageSupported::language}],			 string(1, '|'),
+								   languagesupported.status[{"V_Max", LanguageSupported::language}],			 string(1, '|'),
+								   languagesupported.status[{"Volt_actual", LanguageSupported::language}]
+								};
+	for (const auto & print : batteryHeadingsPrinter)
+	{
+		cout << print.data();
+	}
+	cout << endl;
+	cout<<weatherIndicator::todaysTemperature     << "`C" << setw(29) <<BatteryElements::temperature            << "`C" << setw(4) 
+		<<StateOfChargeRate::lowBatteryStatus     << "%"  << setw(4)  << StateOfChargeRate::fullBatteryStatus   << "%"  << setw(4) 
+		<<StatusOfCharge::currentBatteryStatus    << "%"  << setw(18) <<CurrentIndicator::currentMinThreshould  << "E"  << setw(5)  
+		<<CurrentIndicator::currentMaxThreshould  << "E"  << setw(6)  <<BatteryElements::current                << "E"  << setw(12) 
+		<<VoltageIndicator::voltageMinThreshould  << "V"  << setw(4)  <<VoltageIndicator::vOltageMaxThreshould  << "V"  << setw(6)  
+		<<BatteryElements::voltage                << "V"  << endl;
+			
 }
 
 bool CurrentIndicator::currentStatus()
@@ -74,7 +95,7 @@ bool VoltageIndicator::voltageStatus()
 
 bool TempratureIndicator::temperatureStatus()
 {
-	cout << "-------------------------------------------------"<< languagesupported.status[{"B_charging_rate", LanguageSupported::language}] <<" -------------------------------------------------------" << endl;
+	cout << "-------------------------------------------------"<< languagesupported.status[{"B_charging_rate", LanguageSupported::language}] <<"-------------------------------------------------------" << endl;
 	
 	if (temperatureMinThreshould >= BatteryElements::temperature)
 	{
@@ -87,7 +108,7 @@ bool TempratureIndicator::temperatureStatus()
 	return true;
 }
 
-int temperatureConversion(string temp)
+int temperatureConvertToCelsius(string temp)
 {
 	int measurement;
 	string unit;
@@ -103,7 +124,7 @@ int temperatureConversion(string temp)
 	return measurement;
 }
 
-BatteryIndicator::BatteryIndicator(string temp, float vol, float curr)
+BatteryParameters::BatteryParameters(string temp, float vol, float curr)
 {
 	cout << "-------------------------------------------------"<< languagesupported.status[{"B_specification", LanguageSupported::language}]<<" ---------------------- ------------------" << endl;
 	
@@ -112,7 +133,7 @@ BatteryIndicator::BatteryIndicator(string temp, float vol, float curr)
 
 	/*----temperature conversion----*/
 
-	temperature = temperatureConversion(temp);
+	temperature = temperatureConvertToCelsius(temp);
 
 	/*----temperature conversion----*/
 

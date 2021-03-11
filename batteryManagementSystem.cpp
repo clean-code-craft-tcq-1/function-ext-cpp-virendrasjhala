@@ -19,7 +19,7 @@ int main() {
 	float checkBatteryCurrent  = 2;
 
 	/*---------- select language ----------*/
-	string language = "Gmn";
+	string language = "eng";
 	/*---------- select language ----------*/
 
 	/*-------------------------------------------input parameters----------------------------------------*/
@@ -37,7 +37,7 @@ int main() {
 	assert(weatherindicator.weatherStatus(setTodaysTemperature) == true);
 
 	/*-------------------------------------------battery requirements-------------------------------------*/
-	BatteryIndicator Batteryindicator(checkBatteryTemperature, checkBatteryVoltage, checkBatteryCurrent);
+	BatteryParameters batteryparameters(checkBatteryTemperature, checkBatteryVoltage, checkBatteryCurrent);
 
 	/*-------------------------------------------statusOfCharge rate--------------------------------------*/
 	TempratureIndicator T_Indicator;
@@ -47,5 +47,4 @@ int main() {
 	assert(V_Indicator.voltageStatus()    == true);
 	assert(C_Indicator.currentStatus()    == true);
 
-	
 }
