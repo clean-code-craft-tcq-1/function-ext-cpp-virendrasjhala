@@ -13,7 +13,7 @@ int main() {
 	string checkBatteryTemperature = "33F"; 
 	/*---------- temperature in Fahrenheit ----------*/
 
-	string setTodaysTemperature = "20C";
+	string setTodaysTemperature = "100C";
 	int checkStatusofcharge  = 50;
 	float checkBatteryVoltage  = 4;
 	float checkBatteryCurrent  = 0.9;
