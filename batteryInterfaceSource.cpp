@@ -9,7 +9,7 @@
 #include <vector>
 using namespace std;
 
-int BatteryElements::temperature;
+float BatteryElements::temperature;
 float BatteryElements::voltage;
 float BatteryElements::current;
 
@@ -26,12 +26,14 @@ int   StateOfChargeRate::fullBatteryStatus = 80;
 int   StateOfChargeRate::lowBatteryStatus = 20;
 
 int   StatusOfCharge::currentBatteryStatus;
-float weatherIndicator::todaysTemperature;
+double weatherIndicator::todaysTemperature;
 float weatherIndicator::hotWeather  = 70;
 float weatherIndicator::coldWeather = -50;
 
 string LanguageSupported::language;
 LanguageSupported languagesupported;
+
+vector<string> B_spec;
 
 
 void BatterySpecification::BatterySpecificationPrinter()
@@ -59,7 +61,7 @@ void BatterySpecification::BatterySpecificationPrinter()
 	}
 	cout << endl;
 	cout<<weatherIndicator::todaysTemperature     << "`C" << setw(29) <<BatteryElements::temperature            << "`C" << setw(4) 
-		<<StateOfChargeRate::lowBatteryStatus     << "%"  << setw(4)  << StateOfChargeRate::fullBatteryStatus   << "%"  << setw(4) 
+		<<StateOfChargeRate::lowBatteryStatus     << "%"  << setw(4)  <<StateOfChargeRate::fullBatteryStatus    << "%"  << setw(4) 
 		<<StatusOfCharge::currentBatteryStatus    << "%"  << setw(18) <<CurrentIndicator::currentMinThreshould  << "E"  << setw(5)  
 		<<CurrentIndicator::currentMaxThreshould  << "E"  << setw(6)  <<BatteryElements::current                << "E"  << setw(12) 
 		<<VoltageIndicator::voltageMinThreshould  << "V"  << setw(4)  <<VoltageIndicator::vOltageMaxThreshould  << "V"  << setw(6)  
@@ -67,50 +69,65 @@ void BatterySpecification::BatterySpecificationPrinter()
 			
 }
 
-bool CurrentIndicator::currentStatus()
+bool BatterySpecification::batteryErrorPrinter() 
 {
-	if (currentMinThreshould >= BatteryElements::current)
+	cout << "-------"  << languagesupported.status[{"B_SOC", LanguageSupported::language }]           << "/"
+		 << "-------"  << languagesupported.status[{"W_condition", LanguageSupported::language }]     << "/"
+		 << "-------"  << languagesupported.status[{"B_charging_rate", LanguageSupported::language }] 
+		 << "-------"  << endl;
+	if (B_spec.empty())
 	{
-		cout << languagesupported.status[{"LOW_CURRENT_BREACH", LanguageSupported::language}] << endl;
+		return true;
 	}
-	if (currentMaxThreshould <= BatteryElements::current)
+	else
 	{
-		cout << languagesupported.status[{"HIGH_CURRENT_BREACH", LanguageSupported::language}] << endl;
+		for (const auto & printError : B_spec)
+		{
+			cout << printError.data()<<endl;
+		}
+		return true;
 	}
-	return true;
+
 }
 
-bool VoltageIndicator::voltageStatus()
+void BatterySpecification::BatteryParametersCheck(string parameterStatus1, string parameterStatus2, double actualValue, double minValue, double MaxVAlue)
 {
-	if (voltageMinThreshould >= BatteryElements::voltage)
-	{
-		cout << languagesupported.status[{"LOW_VOLTAGE_BREACH", LanguageSupported::language}] << endl;
-	}
-	if (vOltageMaxThreshould <= BatteryElements::voltage)
-	{
-		cout << languagesupported.status[{"HIGH_VOLTAGE_BREACH", LanguageSupported::language}] << endl;
-	}
-	return true;
-}
-
-bool TempratureIndicator::temperatureStatus()
-{
-	cout << "-------------------------------------------------"<< languagesupported.status[{"B_charging_rate", LanguageSupported::language}] <<"-------------------------------------------------------" << endl;
 	
-	if (temperatureMinThreshould >= BatteryElements::temperature)
+	if (minValue >= actualValue)
 	{
-		cout << languagesupported.status[{"LOW_B_TEMP_BREACH", LanguageSupported::language}] << endl;
+		B_spec.push_back(languagesupported.status[{parameterStatus1, LanguageSupported::language }]);
 	}
-	if (temperatureMaxThreshould <= BatteryElements::temperature)
+	if (MaxVAlue <= actualValue)
 	{
-		cout << languagesupported.status[{"HIGH_B_TEMP_BREACH", LanguageSupported::language}] << endl;
+		B_spec.push_back(languagesupported.status[{parameterStatus2, LanguageSupported::language }]);
 	}
-	return true;
+	
 }
 
-int temperatureConvertToCelsius(string temp)
+void CurrentIndicator::currentStatus()
 {
-	int measurement;
+	BatterySpecification B_PCheck;
+	B_PCheck.BatteryParametersCheck("LOW_CURRENT_BREACH","HIGH_CURRENT_BREACH", BatteryElements::current, currentMinThreshould, currentMaxThreshould);
+
+}
+
+void VoltageIndicator::voltageStatus()
+{
+	BatterySpecification B_PCheck;
+	B_PCheck.BatteryParametersCheck("LOW_VOLTAGE_BREACH","HIGH_VOLTAGE_BREACH", BatteryElements::voltage, voltageMinThreshould, vOltageMaxThreshould);
+	
+}
+
+void TempratureIndicator::temperatureStatus()
+{
+	BatterySpecification B_PCheck;
+	B_PCheck.BatteryParametersCheck("LOW_B_TEMP_BREACH","HIGH_B_TEMP_BREACH", BatteryElements::temperature, temperatureMinThreshould, temperatureMaxThreshould);
+
+}
+
+float temperatureConvertToCelsius(string temp)
+{
+	float measurement;
 	string unit;
 	std::stringstream ss;
 	ss << temp;
@@ -124,9 +141,9 @@ int temperatureConvertToCelsius(string temp)
 	return measurement;
 }
 
-BatteryParameters::BatteryParameters(string temp, float vol, float curr)
+void BatteryParameters::Batteryparameters(string temp, float vol, float curr)
 {
-	cout << "-------------------------------------------------"<< languagesupported.status[{"B_specification", LanguageSupported::language}]<<" ---------------------- ------------------" << endl;
+	cout << "-------------------------------------------------" << languagesupported.status[{"B_specification", LanguageSupported::language }] << " ---------------------- ------------------" << endl;
 	
 	current = curr;
 	voltage = vol;
@@ -141,42 +158,23 @@ BatteryParameters::BatteryParameters(string temp, float vol, float curr)
 	Batteryspec.BatterySpecificationPrinter();
 }
 
-bool weatherIndicator::weatherStatus(int todaysTemperature)
+void weatherIndicator::weatherStatus(string today_Temperature)
 {
-	cout << "-------------------------------------------------"<< languagesupported.status[{"W_condition", LanguageSupported::language}] <<" ---------------------------------------------" << endl;
-	
-	if (hotWeather < todaysTemperature)
-	{
-		cout << languagesupported.status[{"LOW_TEMP_BREACH", LanguageSupported::language}] << endl;
-	}
-	if (coldWeather > todaysTemperature)
-	{
-		cout << languagesupported.status[{"HIGH_TEMP_BREACH", LanguageSupported::language}] << endl;
-	}
-	return true;
+	weatherIndicator::todaysTemperature =temperatureConvertToCelsius(today_Temperature);
+	BatterySpecification B_PCheck;
+	B_PCheck.BatteryParametersCheck("LOW_TEMP_BREACH","HIGH_TEMP_BREACH", todaysTemperature, coldWeather, hotWeather);
 }
 
-bool StatusOfCharge::BatteryChargingStatus(int BatteryStatus)
-{
-		StatusOfCharge::currentBatteryStatus = BatteryStatus;
-		cout << "-------------------------------------------------"<< languagesupported.status[{"B_SOC", LanguageSupported::language}]<<" --------------------------------------------------" << endl;
-		
-		if (currentBatteryStatus <= lowBatteryStatus)
-		{
-			cout << languagesupported.status[{"LOW_SOC_BREACH", LanguageSupported::language}] << endl;
-			
-		}
-		if (currentBatteryStatus == fullBatteryStatus)
-		{
-			cout << languagesupported.status[{"HIGH_SOC_BREACH", LanguageSupported::language}] << endl;
-		}
-	
-	return true;
+void StatusOfCharge::BatteryChargingStatus(int BatteryStatus)
+{	
+	currentBatteryStatus = BatteryStatus;
+	BatterySpecification B_PCheck;
+	B_PCheck.BatteryParametersCheck("LOW_SOC_BREACH","HIGH_SOC_BREACH", currentBatteryStatus, lowBatteryStatus, fullBatteryStatus);
 }
 
 void LanguageSupported::selectLanguage(string lang)
 {
 	language = lang;
-	cout << "-------------------------------------------------"<< languagesupported.status[{"C_Language", LanguageSupported::language}]<< "--------------------------------------------------" << endl;
+	cout << "-------------------------------------------------" << languagesupported.status[{"C_Language", LanguageSupported::language }] << "--------------------------------------------------" << endl;
 	cout << language << endl;
 }

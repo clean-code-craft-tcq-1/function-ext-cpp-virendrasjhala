@@ -12,23 +12,16 @@ class BatteryElements
 public:
 	static float current;
 	static float voltage;
-	static int temperature;
+	static float temperature;
 };
-class BatterySpecification:public BatteryElements
-{
-public:
-	void BatterySpecificationPrinter();
-	
-	vector<string>batteryHeadingsPrinter;
-	
-};
+
 class CurrentIndicator
 {
 public:
 	static double currentMinThreshould;
 	static double currentMaxThreshould;
 
-	bool currentStatus();
+	void currentStatus();
 	
 };
 class VoltageIndicator 
@@ -37,7 +30,7 @@ public:
 	static float voltageMinThreshould;
 	static float vOltageMaxThreshould;
 
-	bool voltageStatus();
+	void voltageStatus();
 	
 };
 class TempratureIndicator 
@@ -46,15 +39,25 @@ public:
 	static float temperatureMinThreshould;
 	static float temperatureMaxThreshould;
 
-	bool temperatureStatus();
+	void temperatureStatus();
 	
 };
 class BatteryParameters :public BatteryElements
 {
 public:
 	BatteryParameters() {}
-	BatteryParameters(string temp, float vol, float curr);
-	
+	void Batteryparameters(string temp, float vol, float curr);
+	virtual void BatteryParametersCheck(string parameterStatus1, string parameterStatus2, double actualValue, double minValue, double MaxVAlue) = 0;
+	virtual bool batteryErrorPrinter()=0;
+};
+
+class BatterySpecification :public BatteryParameters
+{
+public:
+	void BatterySpecificationPrinter();
+	vector<string>batteryHeadingsPrinter;
+	void BatteryParametersCheck(string parameterStatus1, string parameterStatus2, double actualValue, double minValue, double MaxVAlue);
+	bool batteryErrorPrinter();
 };
 class StateOfChargeRate
 {
@@ -69,7 +72,7 @@ class StatusOfCharge :public StateOfChargeRate
 public:
 	static int currentBatteryStatus;
 	StatusOfCharge() {}
-	bool BatteryChargingStatus(int BatteryStatus);
+	void BatteryChargingStatus(int BatteryStatus);
 	
 };
 class weatherIndicator 
@@ -77,16 +80,16 @@ class weatherIndicator
 public:
 	static float hotWeather;
 	static float coldWeather;
-	static float todaysTemperature;
+	static double todaysTemperature;
 
-	bool weatherStatus(int todaysTemperature);
+	void weatherStatus(string todaysTemperature);
 };
 class LanguageSupported
 {
 public:
 	static string language;
 	void selectLanguage(string lang);
-	map<pair<string, string>, string > status{ { make_pair("LOW_SOC_BREACH","eng"),"Battery is critical !" },{ make_pair("HIGH_SOC_BREACH","eng"),     "Battery is full charged ! Please disconnect !" },
+	map<pair<string,string>, string > status{ { make_pair("LOW_SOC_BREACH","eng"),"Battery is critical !" },{ make_pair("HIGH_SOC_BREACH","eng"),     "Battery is full charged ! Please disconnect !" },
 	{ make_pair("LOW_TEMP_BREACH","eng") ,    "Very Low weather Temperature!! charge is not allowed !" },    { make_pair("HIGH_TEMP_BREACH","eng"),    "Very high weather Temperature!! charge is not allowed !" },
 	{ make_pair("LOW_CURRENT_BREACH","eng"),  "Charge current Rate is low !" },           { make_pair("HIGH_CURRENT_BREACH","eng"), "Charge current Rate is high !" },
 	{ make_pair("LOW_VOLTAGE_BREACH","eng"),  "Charge voltage Rate is low !" },           { make_pair("HIGH_VOLTAGE_BREACH","eng"), "Charge voltage Rate is high !" },
