@@ -1,5 +1,11 @@
 # Programming Paradigms
 
+
+#
+added two new feature:
+Extension 2: Support a language in addition to English
+Extension 3: Accept input in different units
+# 
 Electric Vehicles have BMS - Battery Management Systems
 
 [Here is an article that helps to understand the need for BMS](https://circuitdigest.com/article/battery-management-system-bms-for-electric-vehicles)
