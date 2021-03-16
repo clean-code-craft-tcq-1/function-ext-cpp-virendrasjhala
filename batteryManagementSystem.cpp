@@ -15,7 +15,7 @@ int main() {
 
 	string setTodaysTemperature = "100C";
 	int checkStatusofcharge  = 50;
-	float checkBatteryVoltage  = 4;
+	float checkBatteryVoltage  = 12;
 	float checkBatteryCurrent  = 0.9;
 
 	/*---------- select language ----------*/
@@ -37,20 +37,22 @@ int main() {
 	weatherindicator.weatherStatus(setTodaysTemperature);
 
 	/*-------------------------------------------battery requirements-------------------------------------*/
-	BatteryParameters *batteryparameters;
-	BatterySpecification satteryspecification;
-	batteryparameters = &satteryspecification;
+	BatteryParameters   *batteryparameters;
+	BatterySpecification batteryspecification;
+	batteryparameters = &batteryspecification;
 	batteryparameters->Batteryparameters(checkBatteryTemperature, checkBatteryVoltage, checkBatteryCurrent);
 
 	/*-------------------------------------------battery errorPrinter--------------------------------------*/
-	CurrentIndicator current_indicator;
-	VoltageIndicator voltage_indicator;
+	CurrentIndicator    current_indicator;
+	VoltageIndicator    voltage_indicator;
 	TempratureIndicator temprature_indicator;
 	current_indicator.currentStatus();
 	voltage_indicator.voltageStatus();
 	temprature_indicator.temperatureStatus();
-	BatterySpecification battery_error_printer;
-	assert(battery_error_printer.batteryErrorPrinter() == true);
 
+	BatteryParameters *battery_parameter_error;
+	BatterySpecification battery_error_printer;
+	battery_parameter_error = &battery_error_printer;
+	assert(battery_parameter_error->batteryErrorPrinter() == true);
 	
 }

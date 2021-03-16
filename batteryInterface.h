@@ -89,7 +89,7 @@ class LanguageSupported
 public:
 	static string language;
 	void selectLanguage(string lang);
-	map<pair<string,string>, string > status{ { make_pair("LOW_SOC_BREACH","eng"),"Battery is critical !" },{ make_pair("HIGH_SOC_BREACH","eng"),     "Battery is full charged ! Please disconnect !" },
+	map<pair<string,string>, string > status{ { make_pair("LOW_SOC_BREACH","eng"),"Battery is critical !" }, { make_pair("HIGH_SOC_BREACH","eng"),     "Battery is full charged ! Please disconnect !" },
 	{ make_pair("LOW_TEMP_BREACH","eng") ,    "Very Low weather Temperature!! charge is not allowed !" },    { make_pair("HIGH_TEMP_BREACH","eng"),    "Very high weather Temperature!! charge is not allowed !" },
 	{ make_pair("LOW_CURRENT_BREACH","eng"),  "Charge current Rate is low !" },           { make_pair("HIGH_CURRENT_BREACH","eng"), "Charge current Rate is high !" },
 	{ make_pair("LOW_VOLTAGE_BREACH","eng"),  "Charge voltage Rate is low !" },           { make_pair("HIGH_VOLTAGE_BREACH","eng"), "Charge voltage Rate is high !" },
